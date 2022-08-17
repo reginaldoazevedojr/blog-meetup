@@ -1,0 +1,25 @@
+version: '3'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    restart: always
+    working_dir: /var/www/html
+    expose:
+      - "9000"
+    volumes:
+      - .:/var/www/html
+
+  web:
+    image: nginx:latest
+    container_name: web
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    links:
+      - php:php
