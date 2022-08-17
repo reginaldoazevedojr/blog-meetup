@@ -8,5 +8,12 @@ ENV ACCEPT_EULA=Y
 
 RUN apt update && apt install -y git unzip
 
+RUN apt-get -y update \
+&& apt-get install -y libicu-dev \
+&& docker-php-ext-configure intl \
+&& docker-php-ext-install intl
+
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/bin --filename=composer
+
+RUN composer self-update --1
