@@ -1,17 +1,19 @@
 <?php
-namespace Application\Entity;
+namespace Application\Model\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * @Entity
+ * @ORM\Entity(repositoryClass="Application\Model\Repository\PostRepository")
  */
 class Post
 {
     /**
-     * @var Uuid
+     * @var string
      * @ORM\Id
+     * @ORM\Column(type="string")
      */
     private $id;
 
@@ -33,17 +35,17 @@ class Post
     }
 
     /**
-     * @return Uuid|UuidInterface
+     * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param Uuid|UuidInterface $id
+     * @param string $id
      */
-    public function setId($id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }

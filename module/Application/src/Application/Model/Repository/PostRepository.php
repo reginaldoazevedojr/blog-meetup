@@ -1,6 +1,6 @@
 <?php
+namespace Application\Model\Repository;
 
-class PostRepository
-{
+use Doctrine\ORM\EntityRepository;
 
-}
+class PostRepository extends EntityRepository { }
