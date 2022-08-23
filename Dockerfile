@@ -8,6 +8,8 @@ ENV ACCEPT_EULA=Y
 
 RUN apt update && apt install -y git unzip
 
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
+
 RUN apt-get -y update \
 && apt-get install -y libicu-dev \
 && docker-php-ext-configure intl \
