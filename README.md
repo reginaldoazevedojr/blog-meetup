@@ -13,6 +13,18 @@ Dependences Install
 docker compose exec php sh -c "composer install"
 ```
 
+Migration
+```
+docker compose exec php sh -c "vendor/bin/doctrine-module migrations:migrate --no-interaction"
+```
+
+Tests
+```
+cd /var/www/html/module/Application/src/Application/componentTest
+/var/www/html/vendor/bin/phpunit
+```
+
+
 
 Introduction
 ------------
