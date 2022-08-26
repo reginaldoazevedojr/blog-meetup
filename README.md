@@ -1,6 +1,19 @@
 ZendSkeletonApplication
 =======================
 
+Docker Runing
+------
+
+```
+docker compose up -d --build
+```
+
+Dependences Install
+```
+docker compose exec php sh -c "composer install"
+```
+
+
 Introduction
 ------------
 This is a simple, skeleton application using the ZF2 MVC layer and module
