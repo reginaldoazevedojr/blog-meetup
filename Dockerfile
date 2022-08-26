@@ -19,3 +19,5 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/bin --filename=composer
 
 RUN composer self-update --1
+
+RUN composer install
