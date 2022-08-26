@@ -21,14 +21,11 @@ class Version20220823040614 extends AbstractMigration
             id          uuid         not null primary key ,
             title       varchar(100) not null,
             description varchar(5000) not null
-        )"); 
+        )");
     }
 
-    /**
-     * @param Schema $schema
-     */
-    public function down()
+    public function down(Schema $schema)
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // TODO: Implement down() method.
     }
 }
