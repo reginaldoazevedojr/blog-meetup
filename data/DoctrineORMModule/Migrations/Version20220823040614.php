@@ -30,6 +30,5 @@ class Version20220823040614 extends AbstractMigration
     public function down
     {
         // this down() migration is auto-generated, please modify it to your needs
-
     }
 }
