@@ -11,5 +11,19 @@
  * credentials from accidentally being committed into version control.
  */
 
-return array(
-);
+return [
+    'doctrine' => array(
+        'connection' => array(
+            'orm_default' => array(
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOPgSql\Driver',
+                'params' => array(
+                    'host'     => 'db',
+                    'port'     => '5432',
+                    'user'     => 'postgres',
+                    'password' => 'postgres',
+                    'dbname'   => 'db_blog',
+                )
+            )
+        )
+    ),
+];
