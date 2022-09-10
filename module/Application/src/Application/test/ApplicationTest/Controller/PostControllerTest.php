@@ -8,6 +8,9 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class PostControllerTest extends AbstractHttpControllerTestCase
 {
+    /** @var EntityManager */
+    private $entityManger;
+
     public function setUp()
     {
         $this->setApplicationConfig(
@@ -17,8 +20,8 @@ class PostControllerTest extends AbstractHttpControllerTestCase
 
         $serviceManager = $this->getApplicationServiceLocator();
         /** @var EntityManager $entityManager */
-        $entityManager = $serviceManager->get(EntityManager::class);
-        $query = $entityManager->createQuery('DELETE Application\Model\Entity\Post');
+        $this->entityManager = $serviceManager->get(EntityManager::class);
+        $query = $this->entityManager->createQuery('DELETE Application\Model\Entity\Post');
         $query->execute();
     }
 
@@ -56,12 +59,9 @@ class PostControllerTest extends AbstractHttpControllerTestCase
         $statusCodeOk = 200;
         $post = PostBuilder::build();
         $postSecond = PostBuilder::build();
-        $serviceManager = $this->getApplicationServiceLocator();
-        /** @var EntityManager $entityManager */
-        $entityManager = $serviceManager->get(EntityManager::class);
-        $entityManager->persist($post);
-        $entityManager->persist($postSecond);
-        $entityManager->flush();
+        $this->entityManager->persist($post);
+        $this->entityManager->persist($postSecond);
+        $this->entityManager->flush();
 
         $this->dispatch('/post/find-all', "GET");
         $data = json_decode($this->getResponse()->getContent(), true);
@@ -71,5 +71,23 @@ class PostControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('postcontroller');
         $this->assertMatchedRouteName('post-find-all');
         $this->assertCount(2, $data);
+    }
+
+    public function testReturnPostById()
+    {
+        $statusCodeOk = 200;
+        $post = PostBuilder::build();
+        $this->entityManager->persist($post);
+        $this->entityManager->flush();
+        $this->dispatch("/post/find/{$post->getId()}", "GET");
+        $data = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode($statusCodeOk);
+        $this->assertModuleName('application');
+        $this->assertControllerName('application\controller\postcontroller');
+        $this->assertControllerClass('postcontroller');
+        $this->assertMatchedRouteName('post-find');
+        $this->assertEquals($post->getId(), $data['id']);
+        $this->assertEquals($post->getTitle(), $data['title']);
+        $this->assertEquals($post->getDescription(), $data['description']);
     }
 }

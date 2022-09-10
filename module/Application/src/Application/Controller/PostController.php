@@ -48,4 +48,20 @@ class PostController extends AbstractActionController
         }
         return new JsonModel($data);
     }
+
+    public function findAction()
+    {
+        $statusCodeOk = 200;
+        $statusNotFound = 404;
+        $id = $this->params()->fromRoute('id');
+        $post = $this->postService->find($id);
+        if (!$post) {
+            $this->getResponse()->setStatusCode($statusNotFound);
+            return new JsonModel([
+                'message' => 'Post not found'
+            ]);
+        }
+        $this->getResponse()->setStatusCode($statusCodeOk);
+        return new JsonModel($post->toArray());
+    }
 }

@@ -28,4 +28,16 @@ class PostService
         return $postRepository->findAll();
     }
 
+    public function find($id): ?Post
+    {
+        $postRepository = $this->entityManager->getRepository(Post::class);
+        try {
+            /** @var Post $post */
+            $post = $postRepository->findOneBy(['id' => $id]);
+            return $post;
+        } catch (\Exception $error) {
+            return null;
+        }
+    }
+
 }
