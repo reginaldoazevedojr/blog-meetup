@@ -37,6 +37,16 @@ return [
                     ),
                 ),
             ),
+            'post-find-all' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route' => '/post/find-all',
+                    'defaults' => array(
+                        'controller' => PostController::class,
+                        'action' => 'findAll',
+                    ),
+                ),
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

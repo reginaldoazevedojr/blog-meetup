@@ -9,10 +9,9 @@ use Zend\View\Model\JsonModel;
 
 class PostController extends AbstractActionController
 {
+    private $postService;
 
-    private  $postService;
-
-    public function __construct( PostService $postService )
+    public function __construct(PostService $postService)
     {
         $this->postService = $postService;
     }
@@ -20,10 +19,10 @@ class PostController extends AbstractActionController
     public function createAction()
     {
         $statusCodeCreated = 201;
-        $params =$this->getRequest()->getPost()->toArray();
+        $params = $this->getRequest()->getPost()->toArray();
 
         try {
-            $post = (new PostDTO( $params ))->toEntity();
+            $post = (new PostDTO($params))->toEntity();
         } catch (\Exception $error) {
             $this->getResponse()->setStatusCode(400);
             return new JsonModel([
@@ -35,6 +34,18 @@ class PostController extends AbstractActionController
 
         $this->getResponse()->setStatusCode($statusCodeCreated);
 
-        return new JsonModel( $post->toArray() );
+        return new JsonModel($post->toArray());
+    }
+
+    public function findAllAction()
+    {
+        $statusCodeOk = 200;
+        $this->getResponse()->setStatusCode($statusCodeOk);
+        $posts = $this->postService->findAll();
+        $data = [];
+        foreach ($posts as $post) {
+            $data[] = $post->toArray();
+        }
+        return new JsonModel($data);
     }
 }

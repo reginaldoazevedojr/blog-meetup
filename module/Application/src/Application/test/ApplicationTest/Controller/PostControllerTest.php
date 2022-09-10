@@ -2,9 +2,8 @@
 
 namespace Application\Controller;
 
-use Application\Exception\BusinessException;
 use ApplicationTest\Support\Builder\PostBuilder;
-use Zend\Mvc\Application;
+use Doctrine\ORM\EntityManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class PostControllerTest extends AbstractHttpControllerTestCase
@@ -15,6 +14,12 @@ class PostControllerTest extends AbstractHttpControllerTestCase
             include __DIR__ . '/../../../../../../../config/application.config.php'
         );
         parent::setUp();
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceManager->get(EntityManager::class);
+        $query = $entityManager->createQuery('DELETE Application\Model\Entity\Post');
+        $query->execute();
     }
 
     public function testReturnCreatedInPost()
@@ -44,5 +49,27 @@ class PostControllerTest extends AbstractHttpControllerTestCase
         $this->assertResponseStatusCode($statusCodeBadRequest);
         $data = json_decode($this->getResponse()->getContent(), true);
         $this->assertTrue(isset($data['message']));
+    }
+
+    public function testReturnAllPost()
+    {
+        $statusCodeOk = 200;
+        $post = PostBuilder::build();
+        $postSecond = PostBuilder::build();
+        $serviceManager = $this->getApplicationServiceLocator();
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceManager->get(EntityManager::class);
+        $entityManager->persist($post);
+        $entityManager->persist($postSecond);
+        $entityManager->flush();
+
+        $this->dispatch('/post/find-all', "GET");
+        $data = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode($statusCodeOk);
+        $this->assertModuleName('application');
+        $this->assertControllerName('application\controller\postcontroller');
+        $this->assertControllerClass('postcontroller');
+        $this->assertMatchedRouteName('post-find-all');
+        $this->assertCount(2, $data);
     }
 }
