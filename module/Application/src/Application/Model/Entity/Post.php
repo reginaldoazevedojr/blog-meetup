@@ -82,7 +82,7 @@ class Post
         $this->description = $description;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),
