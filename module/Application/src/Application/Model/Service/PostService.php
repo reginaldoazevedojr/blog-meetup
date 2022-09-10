@@ -32,9 +32,7 @@ class PostService
     {
         $postRepository = $this->entityManager->getRepository(Post::class);
         try {
-            /** @var Post $post */
-            $post = $postRepository->findOneBy(['id' => $id]);
-            return $post;
+            return $postRepository->findOneBy(['id' => $id]);
         } catch (\Exception $error) {
             return null;
         }

@@ -8,9 +8,6 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class PostControllerTest extends AbstractHttpControllerTestCase
 {
-    /** @var EntityManager */
-    private $entityManger;
-
     public function setUp()
     {
         $this->setApplicationConfig(
