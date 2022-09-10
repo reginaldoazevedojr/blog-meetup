@@ -19,13 +19,21 @@ class PostController extends AbstractActionController
 
     public function createAction()
     {
+        $statusCodeCreated = 201;
         $params =$this->getRequest()->getPost()->toArray();
-        
-        $post = (new PostDTO( $params ))->toEntity();
-        
+
+        try {
+            $post = (new PostDTO( $params ))->toEntity();
+        } catch (\Exception $error) {
+            $this->getResponse()->setStatusCode(400);
+            return new JsonModel([
+                'message' => $error->getMessage()
+            ]);
+        }
+
         $this->postService->save($post);
 
-        $this->getResponse()->setStatusCode(201);
+        $this->getResponse()->setStatusCode($statusCodeCreated);
 
         return new JsonModel( $post->toArray() );
     }
