@@ -13,12 +13,14 @@ use Application\Controller\Factory\PostControllerFactory;
 use Application\Controller\PostController;
 use Application\Model\Service\Factory\PostServiceFactory;
 use Application\Model\Service\PostService;
+use Zend\Mvc\Router\Http\Literal;
+use Zend\Mvc\Router\Http\Segment;
 
 return [
     'router' => array(
         'routes' => array(
             'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => Literal::class,
                 'options' => array(
                     'route' => '/',
                     'defaults' => array(
@@ -28,7 +30,7 @@ return [
                 ),
             ),
             'post' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => Literal::class,
                 'options' => array(
                     'route' => '/post',
                     'defaults' => array(
@@ -38,7 +40,7 @@ return [
                 ),
             ),
             'post-find-all' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => Literal::class,
                 'options' => array(
                     'route' => '/post/find-all',
                     'defaults' => array(
@@ -48,7 +50,7 @@ return [
                 ),
             ),
             'post-find' => array(
-                'type' => 'Segment',
+                'type' => Segment::class,
                 'options' => array(
                     'route' => '/post/find/[:id]',
                     'constraints' => array(
