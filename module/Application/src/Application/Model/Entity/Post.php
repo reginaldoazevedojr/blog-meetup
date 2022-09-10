@@ -81,4 +81,13 @@ class Post
     {
         $this->description = $description;
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+        ];
+    }
 }

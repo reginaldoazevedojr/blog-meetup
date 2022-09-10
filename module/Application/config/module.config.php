@@ -9,6 +9,11 @@
 
 namespace Application;
 
+use Application\Controller\Factory\PostControllerFactory;
+use Application\Controller\PostController;
+use Application\Model\Service\Factory\PostServiceFactory;
+use Application\Model\Service\PostService;
+
 return [
     'router' => array(
         'routes' => array(
@@ -19,6 +24,16 @@ return [
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
                         'action' => 'index',
+                    ),
+                ),
+            ),
+            'post' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route' => '/post',
+                    'defaults' => array(
+                        'controller' => PostController::class,
+                        'action' => 'create',
                     ),
                 ),
             ),
@@ -60,6 +75,7 @@ return [
         ),
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+            PostService::class => PostServiceFactory::class
         ),
     ),
     'translator' => array(
@@ -74,8 +90,11 @@ return [
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => Controller\IndexController::class
+            'Application\Controller\Index' => Controller\IndexController::class,
         ),
+        'factories' => [
+            PostController::class => PostControllerFactory::class,
+        ],
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
@@ -92,6 +111,9 @@ return [
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
+        'strategies' => [
+            'ViewJsonStrategy',
+        ],
     ),
     // Placeholder for console routes
     'console' => array(
