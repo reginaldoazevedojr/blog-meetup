@@ -62,6 +62,19 @@ return [
                     ),
                 ),
             ),
+            'post-delete' => array(
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/post/delete/[:id]',
+                    'constraints' => array(
+                        'id' => '[a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => PostController::class,
+                        'action' => 'delete',
+                    ),
+                ),
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

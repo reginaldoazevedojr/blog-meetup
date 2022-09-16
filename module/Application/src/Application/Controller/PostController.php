@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Controller\DTO\PostDTO;
+use Application\Exception\BusinessException;
 use Application\Model\Service\PostService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -20,7 +21,6 @@ class PostController extends AbstractActionController
     {
         $statusCodeCreated = 201;
         $params = $this->getRequest()->getPost()->toArray();
-
         try {
             $post = (new PostDTO($params))->toEntity();
         } catch (\Exception $error) {
@@ -54,14 +54,28 @@ class PostController extends AbstractActionController
         $statusCodeOk = 200;
         $statusNotFound = 404;
         $id = $this->params()->fromRoute('id');
-        $post = $this->postService->find($id);
-        if (!$post) {
+        try {
+            $post = $this->postService->find($id);
+        } catch (BusinessException $error) {
             $this->getResponse()->setStatusCode($statusNotFound);
-            return new JsonModel([
-                'message' => 'Post not found'
-            ]);
+            return new JsonModel(['message' => $error->getMessage()]);
         }
         $this->getResponse()->setStatusCode($statusCodeOk);
         return new JsonModel($post->toArray());
+    }
+
+    public function deleteAction()
+    {
+        $statusCodeOk = 200;
+        $statusNotFound = 400;
+        $id = $this->params()->fromRoute('id');
+        try {
+            $this->postService->delete($id);
+        } catch (BusinessException $error) {
+            $this->getResponse()->setStatusCode($statusNotFound);
+            return new JsonModel(['message' => $error->getMessage()]);
+        }
+        $this->getResponse()->setStatusCode($statusCodeOk);
+        return new JsonModel();
     }
 }

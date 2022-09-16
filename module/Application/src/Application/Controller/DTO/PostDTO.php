@@ -1,6 +1,6 @@
 <?php
 
- namespace Application\Controller\DTO;
+namespace Application\Controller\DTO;
 
 use Application\Exception\BusinessException;
 use Application\Model\Entity\Post;
@@ -8,10 +8,6 @@ use Zend\InputFilter\InputFilter;
 
  class PostDTO extends InputFilter
  {
-    private $title;
-    
-    private $description;
-
     private $titleFilter = [
         'name' => 'title',
         'filters' => [
@@ -34,13 +30,16 @@ use Zend\InputFilter\InputFilter;
         ]
     ];
 
-    public function __construct( array $params )
+     /**
+      * @throws BusinessException
+      */
+     public function __construct(array $params )
     {
         $this->add($this->titleFilter);
         $this->add($this->descriptionFilter);
         $this->setData($params);
         if (!$this->isValid()) {
-            throw new BusinessException("Ivalid Params");
+            throw new BusinessException("Invalid Params");
         }
     }
 
