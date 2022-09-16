@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use ApplicationTest\Support\Builder\PostBuilder;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Uuid;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class PostControllerTest extends AbstractHttpControllerTestCase
@@ -86,5 +87,33 @@ class PostControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals($post->getId(), $data['id']);
         $this->assertEquals($post->getTitle(), $data['title']);
         $this->assertEquals($post->getDescription(), $data['description']);
+    }
+
+    public function testShouldDeletePostCorrectly()
+    {
+        $statusCodeOk = 200;
+        $post = PostBuilder::build();
+        $this->entityManager->persist($post);
+        $this->entityManager->flush();
+        $this->dispatch( "/post/delete/{$post->getId()}", "DELETE");
+
+        $this->assertResponseStatusCode($statusCodeOk);
+        $this->assertModuleName('application');
+        $this->assertControllerName('application\controller\postcontroller');
+        $this->assertControllerClass('postcontroller');
+        $this->assertMatchedRouteName('post-delete');
+    }
+
+    public function testReturnsExceptionWhenNotFoundPost()
+    {
+        $id = Uuid::uuid4();
+        $statusCodeBadRequest = 400;
+        $this->dispatch( "/post/delete/{$id}", "DELETE");
+
+        $this->assertResponseStatusCode($statusCodeBadRequest);
+        $this->assertModuleName('application');
+        $this->assertControllerName('application\controller\postcontroller');
+        $this->assertControllerClass('postcontroller');
+        $this->assertMatchedRouteName('post-delete');
     }
 }
