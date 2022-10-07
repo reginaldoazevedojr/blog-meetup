@@ -9,3 +9,5 @@ nbproject
 .settings
 vendor
 composer.phar
+jenkins/data
+jenkins/data/*
