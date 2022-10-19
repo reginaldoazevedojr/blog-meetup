@@ -9,3 +9,12 @@ nbproject
 .settings
 vendor
 composer.phar
+# Terraform
+.terraform*
+terraform.tfstate*
+
+# SSH keys
+id_rsa*
+
+# K8s
+kubeconfig
